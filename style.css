@@ -39,7 +39,7 @@ body {
 }
 
 #liveriesList div {
-  max-width: 35rem;
+  width: 35rem;
   padding: 1rem;
   border-radius: 0.25rem;
   aspect-ratio: 3/2;
