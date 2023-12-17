@@ -3,25 +3,16 @@ var hasFetched = false;
 var intervalId; // Variable to store the interval ID
 
 function compareByNum(a, b) {
-  if (a == null || b == null) {
-    return 0;
-  }
-  const numA = parseInt((a.num || '0').replace(/,/g, '')); // Convert '539,234' to 539234
-  const numB = parseInt((b.num || '0').replace(/,/g, ''));
+  if (a == null || b == null) return 0;
 
-  if (numA < numB) {
-    console.log(-1);
-    return -1;
-  } else if (numA > numB) {
-    console.log(1);
-    return 1;
-  } else {
-    return 0;
-  }
+  const numA = parseInt(a.num || 0, 10); // Ensure base 10 for parseInt
+  const numB = parseInt(b.num || 0, 10);
+  return numB - numA;
 }
 
 async function fetchDataFlightsim() {
   try {
+    console.log('Started MSFS');
     const response = await fetch(
       'http://localhost:3000/simadds/liveries/xplane'
     );
@@ -41,6 +32,7 @@ async function fetchDataFlightsim() {
     return { liveryData, time };
   } catch (error) {
     console.error('Error fetching data:', error);
+    throw error; // Rethrow the error to propagate it to the caller
   }
 }
 
@@ -58,6 +50,7 @@ intervalId = setInterval(updateTime, 1000);
 
 async function fetchDataMsfs() {
   try {
+    console.log('Started Xplane');
     const { liveryData: liveryData2, time: time2 } = await fetchDataFlightsim();
     const response = await fetch(
       'http://localhost:3000/simadds/liveries/msfsAddons'
@@ -78,7 +71,10 @@ async function fetchDataMsfs() {
     console.log(time);
     hasFetched = true;
 
-    await liveryData.push(...liveryData2); // Spread the elements of liveryData2 into liveryData
+    // Combine MSFS and X-Plane data
+    const liveryDataTemp = [...liveryData2, ...liveryData];
+    liveryData = liveryDataTemp.filter((livery) => livery != null);
+
     time += time2;
 
     const liveriesList = document.getElementById('liveriesList');
@@ -88,8 +84,9 @@ async function fetchDataMsfs() {
 
     console.log(durationSpan.innerHTML); // Update existing span
 
-    // Sort liveryData based on the 'num' property
+    // Sort combined data based on the 'num' property
     liveryData.sort(compareByNum);
+    console.log('Sorted!');
     console.log(liveryData);
 
     liveriesList.innerHTML = '';

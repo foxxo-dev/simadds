@@ -31,7 +31,6 @@ const getLiveriesMsfsAddons = async () => {
   }
 
   // Take a screenshot to check if the popup is closed
-  
 
   console.log('Here 0');
 
@@ -52,7 +51,6 @@ const getLiveriesMsfsAddons = async () => {
             document.body.scrollHeight * (scrollPercentage / 100)
           );
         }, scrollPercentage);
-
 
         await page.waitForTimeout(100); // Add a waiting time after each scroll
       }
@@ -75,7 +73,9 @@ const getLiveriesMsfsAddons = async () => {
             const image = node.querySelector(
               '.post-img-block > figure > a > img'
             );
-            const num = node.querySelector('.day').innerHTML;
+            const num =
+              parseInt(node.querySelector('.day').innerHTML, 10) * 100;
+
             console.log('Data: ', titleLink, ', ', image);
 
             const imageSrc = image.src;
@@ -184,7 +184,7 @@ const getLiveriesXplane = async () => {
                 iElement.parentNode.removeChild(iElement);
               }
 
-              num = tempElement.innerHTML.replace(/\s/g, '');
+              num = tempElement.innerHTML.replace(/\s/g, '').replace(/,/g, '');
             }
 
             if (titleLink && image) {

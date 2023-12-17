@@ -9,6 +9,7 @@ app.use(cors());
 
 app.get('/simadds/liveries/msfsAddons', async (req, res) => {
   try {
+    console.log('started scraping MSFS addons');
     const result = await getLiveriesMsfsAddons();
     res.json(result);
   } catch (error) {
@@ -19,6 +20,7 @@ app.get('/simadds/liveries/msfsAddons', async (req, res) => {
 
 app.get('/simadds/liveries/xplane', async (req, res) => {
   try {
+
     const result = await getLiveriesXplane();
     res.json(result);
   } catch (error) {
