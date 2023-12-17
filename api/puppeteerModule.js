@@ -74,7 +74,7 @@ const getLiveriesMsfsAddons = async () => {
               '.post-img-block > figure > a > img'
             );
             const num =
-              parseInt(node.querySelector('.day').innerHTML, 10) * 100;
+              parseInt(node.querySelector('.day').innerHTML, 10) * 1000;
 
             console.log('Data: ', titleLink, ', ', image);
 
